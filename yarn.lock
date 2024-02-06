@@ -5128,6 +5128,7 @@ __metadata:
     eslint: "npm:^8.0.1"
     eslint-plugin-import: "npm:^2.25.0"
     fork-ts-checker-webpack-plugin: "npm:^7.2.13"
+    is-image: "npm:^4.0.0"
     node-loader: "npm:^2.0.0"
     react: "npm:^18.2.0"
     react-dom: "npm:^18.2.0"
@@ -5366,6 +5367,13 @@ __metadata:
   dependencies:
     is-extglob: "npm:^2.1.1"
   checksum: 17fb4014e22be3bbecea9b2e3a76e9e34ff645466be702f1693e8f1ee1adac84710d0be0bd9f967d6354036fd51ab7c2741d954d6e91dae6bb69714de92c197a
+  languageName: node
+  linkType: hard
+
+"is-image@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "is-image@npm:4.0.0"
+  checksum: ce49cf605d6c4e76740edd10790d7250078fce8773ff7668a8ac356547898f1fdc3b801091fae2e6051b3f8e0730f662070134a84d1ae79b4b0184f45bdefe26
   languageName: node
   linkType: hard
 
