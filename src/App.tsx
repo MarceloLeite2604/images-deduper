@@ -1,12 +1,33 @@
-import { Grid } from '@mui/material';
-import { SelectDirectoryButton } from './components';
+import { BaseStyles, Container } from './components';
 
 export const App = () =>
-
-  <Grid container
-    alignItems='center'
-    justifyContent='center'>
-    <Grid item xs={4}>
-      <SelectDirectoryButton />
-    </Grid>
-  </Grid>;
+  <>
+    <BaseStyles />
+    {/* <Grid container
+      direction='column'
+      justifyContent='flex-start'
+      alignItems='stretch'
+      spacing={0}
+      sx={{
+        minHeight: '100vh'
+      }}>
+      <Grid item xs>
+        <Grid container
+          direction='column'
+          alignItems='center'
+          justifyContent='center'
+          spacing={0}
+          sx={{
+            height: '100%'
+          }}>
+          <Grid item>
+            <SelectDirectoryButton />
+          </Grid>
+        </Grid>
+      </Grid>
+      <Grid item xs={1} >
+        Status bar
+      </Grid>
+    </Grid > */}
+    <Container />
+  </>;
