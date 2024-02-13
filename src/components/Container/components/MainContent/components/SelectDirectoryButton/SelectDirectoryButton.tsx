@@ -23,4 +23,4 @@ export const SelectDirectoryButton = () => {
       Select directory
     </Button >
   );
-}
+};

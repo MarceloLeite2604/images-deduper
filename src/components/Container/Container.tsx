@@ -1,4 +1,4 @@
-import { Grid } from '@mui/material';
+import Grid from '@mui/material/Unstable_Grid2';
 import { MainContent, StatusBar } from './components';
 
 export const Container = () =>
@@ -10,21 +10,13 @@ export const Container = () =>
     sx={{
       minHeight: '100vh'
     }}>
-    <Grid item xs>
-      <Grid container
-        direction='column'
-        alignItems='center'
-        justifyContent='center'
-        spacing={0}
-        sx={{
-          height: '100%'
-        }}>
-        <Grid item>
-          <MainContent />
-        </Grid>
-      </Grid>
+    <Grid xs
+      display='flex'
+      justifyContent='center'
+      alignItems='center'>
+      <MainContent />
     </Grid>
-    <Grid item xs={1} >
+    <Grid maxHeight='1.2rem'>
       <StatusBar
         message='Example message'
         progress={75} />

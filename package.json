@@ -14,6 +14,9 @@
   "keywords": [],
   "author": "marcelo",
   "license": "MIT",
+  "engines": {
+    "node": "~18.18.0"
+  },
   "devDependencies": {
     "@electron-forge/cli": "^7.2.0",
     "@electron-forge/maker-deb": "^7.2.0",
