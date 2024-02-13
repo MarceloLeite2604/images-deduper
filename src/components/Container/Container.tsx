@@ -1,8 +1,16 @@
 import Grid from '@mui/material/Unstable_Grid2';
-import { MainContent, StatusBar } from './components';
+import {
+  MainContent,
+  StatusBar,
+  StatusBarProps
+} from './components';
+import { useState } from 'react';
 
-export const Container = () =>
-  <Grid container
+export const Container = () => {
+
+  useState<StatusBarProps>({});
+
+  return <Grid container
     direction='column'
     justifyContent='flex-start'
     alignItems='stretch'
@@ -16,9 +24,10 @@ export const Container = () =>
       alignItems='center'>
       <MainContent />
     </Grid>
-    <Grid maxHeight='1.2rem'>
+    <Grid>
       <StatusBar
         message='Example message'
         progress={75} />
     </Grid>
   </Grid >;
+};
