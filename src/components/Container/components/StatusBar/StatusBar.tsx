@@ -1,41 +1,40 @@
-import { Typography, styled } from '@mui/material';
+import { Typography } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
-import LinearProgress from '@mui/material/LinearProgress';
+import { ThickLinearProgress } from './components';
+import { StatusContext } from '../../contexts';
+import { useContext } from 'react';
 
-export interface StatusBarProps {
-  message?: string,
-  progress?: number
-}
+export const StatusBar = () => {
 
-const BorderLinearProgress = styled(LinearProgress)(() => ({
-  height: '1rem'
-}));
+  const { message, progress } = useContext(StatusContext);
 
-export const StatusBar = ({ message, progress }: StatusBarProps) =>
-  <Grid
-    container
-    spacing={0}
-    justifyContent='flex-start'
-    alignItems='flex-end'
-    minHeight='1.2rem'>
-    < Grid xs={3} >
-      <BorderLinearProgress
-        variant="determinate"
-        value={progress}
-        hidden={!progress} />
-    </Grid >
+  const progressBar = progress && <ThickLinearProgress value={progress || 0} />;
+
+  return (
     <Grid
-      xs
-      display='flex'
+      container
+      spacing={0}
       justifyContent='flex-start'
-      alignItems='center'>
-      <Typography
-        variant="caption"
-        display="block"
-        sx={{
-          lineHeight: '1em'
-        }}>
-        {message}
-      </Typography>
-    </Grid>
-  </Grid >;
+      alignItems='flex-end'
+      minHeight='1.2rem'>
+      < Grid xs={3} >
+        {progressBar}
+      </Grid >
+      <Grid
+        xs
+        display='flex'
+        justifyContent='flex-start'
+        alignItems='center'>
+        <Typography
+          variant="caption"
+          display="block"
+          sx={{
+            lineHeight: '1em',
+            paddingLeft: '0.8em'
+          }}>
+          {message}
+        </Typography>
+      </Grid>
+    </Grid >
+  );
+};

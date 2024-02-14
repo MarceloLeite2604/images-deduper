@@ -1,4 +1,3 @@
 import { SelectDirectoryButton } from './components';
 
-export const MainContent = () =>
-  <SelectDirectoryButton />;
+export const MainContent = () => <SelectDirectoryButton />;
