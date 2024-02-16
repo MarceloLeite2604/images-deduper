@@ -19,7 +19,10 @@ export const SelectDirectoryButton = () => {
   return (
     < Button
       variant='contained'
-      onClick={selectDirectory} >
+      onClick={selectDirectory}
+      sx={{
+        margin: '5px 0px'
+      }}>
       Select directory
     </Button >
   );

@@ -6,17 +6,13 @@ import { useContext } from 'react';
 
 export const StatusBar = () => {
 
-  const { message, progress } = useContext(StatusContext);
+  const { properties: { progress, message } } = useContext(StatusContext);
 
-  const progressBar = progress && <ThickLinearProgress value={progress || 0} />;
+  const progressBar = progress ? <ThickLinearProgress value={progress} /> : <></>;
 
   return (
-    <Grid
-      container
-      spacing={0}
-      justifyContent='flex-start'
-      alignItems='flex-end'>
-      < Grid xs={3} >
+    <Grid container>
+      <Grid xs={3}>
         {progressBar}
       </Grid >
       <Grid
@@ -25,8 +21,8 @@ export const StatusBar = () => {
         justifyContent='flex-start'
         alignItems='center'>
         <Typography
-          variant="caption"
-          display="block">
+          variant='caption'
+          lineHeight='0.8rem'>
           {message}
         </Typography>
       </Grid>

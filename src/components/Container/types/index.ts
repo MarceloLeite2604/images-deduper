@@ -1,1 +1,2 @@
-export * from './StatusBarProperties';
+export * from './StatusBar';
+export * from './ReactNodeChildren';
