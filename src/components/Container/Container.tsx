@@ -6,7 +6,6 @@ import { useStatusBarProperties } from './hooks';
 export const Container = () => {
 
   const [statusBarProperties] = useStatusBarProperties({ message: 'test', progress: 75 });
-
   return (
     <StatusContext.Provider value={statusBarProperties}>
       <Grid container
@@ -14,9 +13,7 @@ export const Container = () => {
         justifyContent='flex-start'
         alignItems='stretch'
         spacing={0}
-        sx={{
-          minHeight: '100vh'
-        }}>
+        sx={{ flex: 1 }}>
         <Grid xs
           display='flex'
           justifyContent='center'

@@ -3,13 +3,21 @@ import { CssBaseline, GlobalStyles } from '@mui/material';
 export const BaseStyles = () =>
   <>
     <GlobalStyles styles={{
+      html: {
+        height: '100%'
+      },
       body: {
         padding: 0,
-        minWidth: '100vw'
+        height: '100%',
+        display: 'flex',
+        width: '100%',
+        flexDirection: 'column',
+        fontFamily: '-apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, Helvetica, Arial, sans-serif'
       },
       'div#root': {
-        minWidth: '100vw',
-        minHeight: '100vh'
+        display: 'flex',
+        flexDirection: 'column',
+        flex: 1
       }
     }} />
     <CssBaseline />

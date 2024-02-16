@@ -15,8 +15,7 @@ export const StatusBar = () => {
       container
       spacing={0}
       justifyContent='flex-start'
-      alignItems='flex-end'
-      minHeight='1.2rem'>
+      alignItems='flex-end'>
       < Grid xs={3} >
         {progressBar}
       </Grid >
@@ -27,11 +26,7 @@ export const StatusBar = () => {
         alignItems='center'>
         <Typography
           variant="caption"
-          display="block"
-          sx={{
-            lineHeight: '1em',
-            paddingLeft: '0.8em'
-          }}>
+          display="block">
           {message}
         </Typography>
       </Grid>
