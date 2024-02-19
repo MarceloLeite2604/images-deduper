@@ -2,14 +2,12 @@ import {
   FC,
   createContext,
   useCallback,
+  useEffect,
   useMemo,
   useState
 } from 'react';
-import {
-  ReactNodeChildren,
-  StatusBarContext,
-  StatusBarProperties
-} from '../types';
+import { ReactNodeChildren, StatusBarContext } from '../types';
+import { StatusBarProperties } from '../../../../shared/types';
 
 export const StatusContext = createContext<StatusBarContext>({
   properties: {},
@@ -31,6 +29,12 @@ export const StatusContextProvider: FC<ReactNodeChildren> = ({ children }) => {
       };
     });
   }, [setStatusBarProperties]);
+
+  useEffect(() => {
+    window.electronApi.updateStatus((event, properties) => {
+      updateProperties(properties);
+    });
+  }, []);
 
   const value = useMemo<StatusBarContext>(() => {
     return {

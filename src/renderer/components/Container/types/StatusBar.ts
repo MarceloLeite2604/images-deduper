@@ -1,8 +1,4 @@
-
-export interface StatusBarProperties {
-  message?: string,
-  progress?: number
-};
+import { StatusBarProperties } from '../../../../shared/types';
 
 export interface StatusBarContext {
   properties: StatusBarProperties,

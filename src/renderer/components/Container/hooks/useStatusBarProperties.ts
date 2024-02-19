@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { StatusBarProperties } from '../types';
+import { StatusBarProperties } from '../../../../shared/types';
 
 export const useStatusBarProperties = (initialValue: StatusBarProperties = {}) => {
   const [properties, setProperties] = useState<StatusBarProperties>(initialValue);
