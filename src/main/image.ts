@@ -8,11 +8,10 @@ import { updateStatus } from './updateStatus';
 interface Context {
   images: {
     paths: string[],
-    total:
+    total: number,
     processed: number,
     hashes: Map<string, string[]>
-  },
-  hash: crypto.Hash
+  }
 }
 
 function filterImageFilesOnly(dirEnts: fs.Dirent[]) {
@@ -28,8 +27,10 @@ async function retrieveImagesFromDirectory(directoryPath: string) {
     .then(dirents => dirents.map(dirent => path.resolve(dirent.path, dirent.name)));
 };
 
-async function checksumFile(hash: crypto.Hash, path: string) {
-  return new Promise((resolve, reject) => {
+async function calculateFileChecksum(path: string) {
+  return new Promise<string>((resolve, reject) => {
+
+    const hash = crypto.createHash('sha1');
 
     const stream = fs.createReadStream(path);
     stream.on('error', err => reject(err));
@@ -38,26 +39,40 @@ async function checksumFile(hash: crypto.Hash, path: string) {
   });
 };
 
+async function calculateChecksums(context: Context) {
+
+  for (const imagePath of context.images.paths) {
+    const checksum = await calculateFileChecksum(imagePath);
+    const images = context.images.hashes.get(checksum) || [];
+    images.push(imagePath);
+    context.images.hashes.set(checksum, images);
+
+    if (images.length > 1) {
+      updateStatus({
+        message: `Image ${path.basename(imagePath)} found ${images.length} times.`
+      });
+    }
+
+    context.images.processed++;
+  }
+
+  return context;
+}
+
+async function createInitialContext(imagePaths: string[]) {
+  return {
+    images: {
+      paths: imagePaths,
+      total: imagePaths.length,
+      processed: 0,
+      hashes: new Map<string, string[]>()
+    }
+  } as Context;
+};
+
 export async function processImages(result: OpenDialogReturnValue) {
   retrieveImagesFromDirectory(result.filePaths[0])
-    .then(imagePaths => {
-
-      const context: Context = {
-        images: {
-          paths: imagePaths,
-          total: imagePaths.length
-          processed: 0,
-          hashes: new Map<string, string[]>()
-        },
-        hash: crypto.createHash('sha1')
-      };
-
-      let images = 0;
-      imagePaths.forEach(() => {
-        updateStatus({
-          progress: (++images / totalImages) * 100
-        });
-        // displayImage(imagePath);
-      });
-    });
+    .then(createInitialContext)
+    .then(calculateChecksums)
+    .then(console.log);
 };
