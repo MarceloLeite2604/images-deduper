@@ -11,7 +11,7 @@ export const updateStatus = (properties: StatusBarProperties) => {
   updateStatusMethod(properties);
 };
 
-export const initupdateStatusMethod = (updateStatusMethodCallback: UpdateStatusMethodType) => {
+export const initUpdateStatusMethod = (updateStatusMethodCallback: UpdateStatusMethodType) => {
   if (!updateStatusMethod) {
     updateStatusMethod = updateStatusMethodCallback;
   }

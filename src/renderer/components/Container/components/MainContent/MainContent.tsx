@@ -1,5 +1,5 @@
 import Grid from '@mui/material/Unstable_Grid2';
-import { SelectDirectoryButton } from './components';
+import { DuplicatedImagesArea, SelectDirectoryButton } from './components';
 
 export const MainContent = () => {
   return (
@@ -17,7 +17,7 @@ export const MainContent = () => {
         <SelectDirectoryButton />
       </Grid>
       <Grid xs>
-        Content
+        <DuplicatedImagesArea />
       </Grid>
     </Grid >
   );

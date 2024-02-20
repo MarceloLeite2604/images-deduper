@@ -25,7 +25,7 @@ async function retrieveImagesFromDirectory(directoryPath: string) {
   })
     .then(filterImageFilesOnly)
     .then(dirents => dirents.map(dirent => path.resolve(dirent.path, dirent.name)));
-};
+}
 
 async function calculateFileChecksum(path: string) {
   return new Promise<string>((resolve, reject) => {
@@ -37,7 +37,7 @@ async function calculateFileChecksum(path: string) {
     stream.on('data', chunk => hash.update(chunk));
     stream.on('end', () => resolve(hash.digest('hex')));
   });
-};
+}
 
 async function calculateChecksums(context: Context) {
 
@@ -59,7 +59,7 @@ async function calculateChecksums(context: Context) {
   return context;
 }
 
-async function createInitialContext(imagePaths: string[]) {
+function createInitialContext(imagePaths: string[]) {
   return {
     images: {
       paths: imagePaths,
@@ -68,11 +68,11 @@ async function createInitialContext(imagePaths: string[]) {
       hashes: new Map<string, string[]>()
     }
   } as Context;
-};
+}
 
-export async function processImages(result: OpenDialogReturnValue) {
-  retrieveImagesFromDirectory(result.filePaths[0])
+export function processImages(result: OpenDialogReturnValue) {
+  return retrieveImagesFromDirectory(result.filePaths[0])
     .then(createInitialContext)
     .then(calculateChecksums)
     .then(console.log);
-};
+}

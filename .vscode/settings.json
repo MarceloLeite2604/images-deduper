@@ -1,6 +1,7 @@
 {
     "editor.formatOnSave": true,
     "editor.tabSize": 2,
+    "eslint.experimental.useFlatConfig": true,
     "typescript.preferences.quoteStyle": "single",
     "javascript.preferences.quoteStyle": "single",
     "workbench.tree.indent": 12
