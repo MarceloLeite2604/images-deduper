@@ -31,7 +31,7 @@ export const StatusContextProvider: FC<ReactNodeChildren> = ({ children }) => {
   }, [setStatusBarProperties]);
 
   useEffect(() => {
-    window.electronApi.updateStatus((event, properties) => {
+    window.electronApi.updateStatus((properties) => {
       updateProperties(properties);
     });
   }, []);

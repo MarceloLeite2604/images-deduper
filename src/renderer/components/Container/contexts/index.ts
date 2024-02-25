@@ -1,1 +1,4 @@
-export * from './StatusContext';
+export * from './ContextProviders';
+
+export { StatusContext } from './StatusContext';
+export { DuplicatedImagesContext } from './DuplicatedImagesContext';

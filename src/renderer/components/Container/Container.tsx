@@ -1,11 +1,11 @@
 import Grid from '@mui/material/Unstable_Grid2';
 import { MainContent, StatusBar } from './components';
-import { StatusContextProvider } from './contexts';
+import { ContextProviders } from './contexts';
 
 export const Container = () => {
 
   return (
-    <StatusContextProvider>
+    <ContextProviders>
       <Grid container
         direction='column'
         justifyContent='flex-start'
@@ -19,6 +19,6 @@ export const Container = () => {
           <StatusBar />
         </Grid>
       </Grid >
-    </StatusContextProvider >
+    </ContextProviders>
   );
 };

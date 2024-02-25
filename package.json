@@ -52,6 +52,7 @@
     "@mui/material": "^5.15.6",
     "electron-squirrel-startup": "^1.0.0",
     "is-image": "^4.0.0",
+    "node-polyfill-webpack-plugin": "^3.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   }

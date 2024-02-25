@@ -2,8 +2,9 @@ import fs from 'original-fs';
 import path from 'path';
 import crypto from 'crypto';
 import isImage from 'is-image';
-import { OpenDialogReturnValue } from 'electron';
-import { updateStatus } from './updateStatus';
+import { NativeImage, OpenDialogReturnValue, nativeImage } from 'electron';
+import { updateStatus, addImage } from './ipcs';
+import { ImageProperties } from '../shared/types';
 
 interface Context {
   images: {
@@ -48,6 +49,16 @@ async function calculateChecksums(context: Context) {
     context.images.hashes.set(checksum, images);
 
     if (images.length > 1) {
+
+      const native: NativeImage = nativeImage.createFromPath(images[0]);
+
+      const imageProperties: ImageProperties = {
+        checksum,
+        locations: images,
+        nativeImage: native
+      };
+
+      addImage(imageProperties);
       updateStatus({
         message: `Image ${path.basename(imagePath)} found ${images.length} times.`
       });
@@ -73,6 +84,5 @@ function createInitialContext(imagePaths: string[]) {
 export function processImages(result: OpenDialogReturnValue) {
   return retrieveImagesFromDirectory(result.filePaths[0])
     .then(createInitialContext)
-    .then(calculateChecksums)
-    .then(console.log);
+    .then(calculateChecksums);
 }

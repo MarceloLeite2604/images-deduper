@@ -1,4 +1,4 @@
-import { StatusBarProperties } from '../shared/types';
+import { StatusBarProperties } from '../../shared/types';
 
 type UpdateStatusMethodType = (properties: StatusBarProperties) => void;
 

@@ -1,21 +1,11 @@
 import { Button } from '@mui/material';
-import { IpcRendererEvent } from 'electron';
-import { MouseEventHandler, useEffect } from 'react';
-
-function displayImageCallback(_event: IpcRendererEvent, imagePath: string) {
-  console.log(imagePath);
-}
+import { MouseEventHandler } from 'react';
 
 const selectDirectory: MouseEventHandler = () => {
   window.electronApi.selectDirectory();
 };
 
 export const SelectDirectoryButton = () => {
-
-  useEffect(() => {
-    console.log('Setting display image');
-    window.electronApi.displayImage(displayImageCallback);
-  }, []);
 
   return (
     < Button
