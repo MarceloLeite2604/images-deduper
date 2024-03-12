@@ -46,30 +46,50 @@ async function calculateFileChecksum(path: string) {
 
 async function calculateChecksums(context: Context) {
 
+  let currentImage: string;
+  let progress: number;
+  let updateStatusIntervalId: NodeJS.Timeout;
+
+  const updateImageScanningStatus = () => {
+
+    const message = `Analysing ${currentImage}...`;
+
+    updateStatus({
+      message,
+      progress
+    });
+  }
+
   for (const imagePath of context.images.paths) {
     const checksum = await calculateFileChecksum(imagePath);
     const images = context.images.hashes.get(checksum) || [];
     images.push(imagePath);
     context.images.hashes.set(checksum, images);
 
-    if (images.length > 1) {
+    currentImage = imagePath;
+    progress = (context.images.processed / context.images.total) * 100;
 
-      const native: NativeImage = nativeImage.createFromPath(images[0]);
+    updateStatusIntervalId ??= setInterval(updateImageScanningStatus, 50);
+
+
+    if (images.length > 1) {
 
       const imageProperties: ImageProperties = {
         checksum,
-        locations: images,
-        nativeImage: native
+        locations: images
       };
 
       addImage(imageProperties);
-      updateStatus({
-        message: `Image ${path.basename(imagePath)} found ${images.length} times.`
-      });
     }
 
     context.images.processed++;
   }
+
+  updateStatusIntervalId && clearInterval(updateStatusIntervalId)
+  updateStatus({
+    message: `Analysis complete. ${context.images.total} image(s) analysed. ${[...context.images.hashes.keys()].length} duplicates found.`,
+    progress: 100
+  });
 
   return context;
 }

@@ -1,9 +1,6 @@
-import { NativeImage } from 'electron';
-
 export interface ImageProperties {
   checksum: string,
-  locations: string[],
-  nativeImage: NativeImage
+  locations: string[]
 }
 
 export type AddImageCallback = (imageProperties: ImageProperties) => void;
