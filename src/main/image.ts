@@ -4,7 +4,9 @@ import crypto from 'crypto';
 import isImage from 'is-image';
 import { NativeImage, OpenDialogReturnValue, nativeImage } from 'electron';
 import { updateStatus, addImage } from './ipcs';
-import { ImageProperties } from '../shared/types';
+import { ImageProperties } from '../shared';
+
+const ignoredExtensions = ['.xcf'];
 
 interface Context {
   images: {
@@ -16,7 +18,9 @@ interface Context {
 }
 
 function filterImageFilesOnly(dirEnts: fs.Dirent[]) {
-  return dirEnts.filter(dirEnt => dirEnt.isFile() && isImage(path.resolve(dirEnt.path, dirEnt.name)));
+  return dirEnts.filter(dirEnt => dirEnt.isFile() &&
+    isImage(path.resolve(dirEnt.path, dirEnt.name)) &&
+    !ignoredExtensions.includes(path.extname(dirEnt.name).toLowerCase()));
 }
 
 async function retrieveImagesFromDirectory(directoryPath: string) {

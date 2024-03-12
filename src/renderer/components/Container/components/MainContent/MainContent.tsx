@@ -13,10 +13,11 @@ export const MainContent = () => {
       <Grid
         display='flex'
         justifyContent='center'
-        alignItems='center'>
+        alignItems='center'
+        overflow='hidden'>
         <SelectDirectoryButton />
       </Grid>
-      <Grid xs>
+      <Grid xs height={0}>
         <DuplicatedImagesArea />
       </Grid>
     </Grid >
