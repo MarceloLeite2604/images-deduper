@@ -12,7 +12,9 @@ export const DuplicatedImagesArea = () => {
       container
       overflow="auto"
       height="100%"
-      spacing={1}>
+      spacing={1}
+      display='flex'
+      flexGrow={1}>
       {[...imagesProperties.entries()].map(([checksum, imageProperties]) =>
         <ImageCard
           key={checksum}

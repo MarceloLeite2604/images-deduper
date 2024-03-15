@@ -2,7 +2,7 @@ import fs from 'original-fs';
 import path from 'path';
 import crypto from 'crypto';
 import isImage from 'is-image';
-import { NativeImage, OpenDialogReturnValue, nativeImage } from 'electron';
+import { OpenDialogReturnValue } from 'electron';
 import { updateStatus, addImage } from './ipcs';
 import { ImageProperties } from '../shared';
 
