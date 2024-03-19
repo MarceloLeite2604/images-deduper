@@ -6,19 +6,24 @@ export const Container = () => {
 
   return (
     <ContextProviders>
-      <Grid container
+      <Grid
+        id="container-grid-container"
+        container
         direction='column'
         justifyContent='flex-start'
         alignItems='stretch'
         spacing={0}
         flex={1}>
-        <Grid xs display='flex'>
+        <Grid
+          id="main-content-container-grid-item"
+          xs
+          display='flex'>
           <MainContent />
         </Grid>
-        <Grid>
+        <Grid id="status-bar-container-grid-item">
           <StatusBar />
         </Grid>
       </Grid >
-    </ContextProviders>
+    </ContextProviders >
   );
 };

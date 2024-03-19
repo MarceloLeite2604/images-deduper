@@ -12,42 +12,52 @@ export const MainContent = () => {
 
   return (
     <Grid
+      id="main-content-grid-container"
       container
       direction='column'
       display='flex'
-      justifyContent='flex-start'
       alignContent='stretch'
       flexGrow={1}>
       <Grid
+        id="select-directory-main-content-grid-item"
         display='flex'
         justifyContent='center'
-        alignItems='center'>
+        alignContent='center'>
         <SelectDirectoryButton />
       </Grid>
       <Grid
+        id='main-content-second-cell-grid-container'
+        container
+        direction='row'
+        display='flex'
         flexGrow={1}
-        height={0}
-        id='main-content-second-cell-grid-item'>
+        height={0}>
         <Grid
-          id='main-content-second-cell-grid-container'
           container
-          direction='row'
           display='flex'
-          height='100%'>
-          <Grid
-            flexGrow={3}
-            id='duplicated-images-area-grid-item'
-            height='100%'>
-            <DuplicatedImagesArea />
-          </Grid>
-          {selectedImageLocations &&
-            <Grid
-              flexGrow={1}
-              id='image-details-area-grid-item'>
-              <ImageDetailsArea locations={selectedImageLocations} />
-            </Grid>}
+          direction='row'
+          justifyContent='flex-start'
+          flexGrow={2}
+          id='duplicated-images-area-second-cell-grid-item'
+          maxHeight='100%'
+          width={0}
+          overflow="auto">
+          <DuplicatedImagesArea />
         </Grid>
-      </Grid >
+        {selectedImageLocations &&
+          <Grid
+            container
+            flexGrow={1}
+            width={0}
+            id='image-details-area-second-cell-grid-container'
+            sx={{
+              height: '100%',
+              maxHeight: '100%',
+              padding: '0.4rem'
+            }}>
+            <ImageDetailsArea locations={selectedImageLocations} />
+          </Grid>}
+      </Grid>
     </Grid>
   );
 };
