@@ -4,10 +4,11 @@ import {
   AddImageCallback,
   StatusBarProperties,
   UpdateStatusCallback,
-  ImageProperties
-} from '../shared/types';
+  ImageProperties,
+  SetRootDirectoryCallback,
+  ipcEvents
+} from '../shared';
 import { contextBridge, ipcRenderer } from 'electron/renderer';
-import { ipcEvents } from '../shared/events';
 
 contextBridge.exposeInMainWorld('electronApi', {
   selectDirectory: () => ipcRenderer.invoke(ipcEvents.selectDirectory),
@@ -16,6 +17,9 @@ contextBridge.exposeInMainWorld('electronApi', {
   }),
   addImage: (addImageCallback: AddImageCallback) => ipcRenderer.on(ipcEvents.addImage, (event, imageProperties) => {
     addImageCallback(imageProperties as ImageProperties);
+  }),
+  setRootDirectory: (setRootDirectoryCallback: SetRootDirectoryCallback) => ipcRenderer.on(ipcEvents.setRootDirectory, (event, rootDirectory) => {
+    setRootDirectoryCallback(rootDirectory as string)
   })
 });
 
@@ -25,7 +29,8 @@ declare global {
     electronApi: {
       selectDirectory: () => void,
       updateStatus: (updateStatusCallback: UpdateStatusCallback) => void
-      addImage: (addImageCallback: AddImageCallback) => void
+      addImage: (addImageCallback: AddImageCallback) => void,
+      setRootDirectory: (setRootDirectoryCallback: SetRootDirectoryCallback) => void
     }
   }
 };

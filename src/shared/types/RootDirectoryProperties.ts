@@ -1,0 +1,1 @@
+export type SetRootDirectoryCallback = (rootDirectory?: string) => void;

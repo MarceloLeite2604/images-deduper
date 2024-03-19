@@ -3,6 +3,7 @@ import { ReactNodeChildren } from '../types';
 import { ImageProperties } from '../../../../shared/types';
 
 interface DuplicatedImagesContextProperties {
+  rootDirectory?: string,
   imagesProperties: Map<string, ImageProperties>,
   addImage: (imageProperties: ImageProperties) => void
 }
@@ -13,6 +14,8 @@ export const DuplicatedImagesContext = createContext<DuplicatedImagesContextProp
 });
 
 export const DuplicatedImagesContextProvider: FC<ReactNodeChildren> = ({ children }) => {
+
+  const [rootDirectory, setRootDirectory] = useState<string>();
 
   const [imagesProperties, setImagesProperties] = useState(new Map<string, ImageProperties>());
 
@@ -32,14 +35,25 @@ export const DuplicatedImagesContextProvider: FC<ReactNodeChildren> = ({ childre
     window.electronApi.addImage((imagesProperties) => {
       addImage(imagesProperties);
     });
+
+    window.electronApi.setRootDirectory((rootDirectory) => {
+      setRootDirectory(rootDirectory);
+    });
   }, []);
 
   const value = useMemo<DuplicatedImagesContextProperties>(() => {
     return {
+      rootDirectory,
+      setRootDirectory,
       imagesProperties,
       addImage
     };
-  }, [imagesProperties, setImagesProperties]);
+  }, [
+    imagesProperties,
+    setImagesProperties,
+    rootDirectory,
+    setRootDirectory
+  ]);
 
   return (
     <DuplicatedImagesContext.Provider value={value} >
