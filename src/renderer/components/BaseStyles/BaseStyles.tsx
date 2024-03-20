@@ -18,6 +18,10 @@ export const BaseStyles = () =>
         display: 'flex',
         flexDirection: 'column',
         flex: 1
+      },
+      '.MuiCardActionArea-root:hover .MuiCardActionArea-focusHighlight': {
+        backgroundColor: 'darkblue',
+        opacity: '0.4'
       }
     }} />
     <CssBaseline />

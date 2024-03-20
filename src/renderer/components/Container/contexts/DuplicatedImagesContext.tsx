@@ -4,13 +4,20 @@ import { ImageProperties } from '../../../../shared/types';
 
 interface DuplicatedImagesContextProperties {
   rootDirectory?: string,
+  setRootDirectory: (rootDirectory?: string) => void,
   imagesProperties: Map<string, ImageProperties>,
-  addImage: (imageProperties: ImageProperties) => void
+  addImage: (imageProperties: ImageProperties) => void,
+  selectedImageChecksum?: string,
+  setSelectedImageChecksum: (hash?: string) => void
 }
 
 export const DuplicatedImagesContext = createContext<DuplicatedImagesContextProperties>({
+  rootDirectory: undefined,
+  setRootDirectory: () => { },
   imagesProperties: new Map<string, ImageProperties>(),
-  addImage: () => { }
+  addImage: () => { },
+  selectedImageChecksum: undefined,
+  setSelectedImageChecksum: () => { }
 });
 
 export const DuplicatedImagesContextProvider: FC<ReactNodeChildren> = ({ children }) => {
@@ -18,6 +25,8 @@ export const DuplicatedImagesContextProvider: FC<ReactNodeChildren> = ({ childre
   const [rootDirectory, setRootDirectory] = useState<string>();
 
   const [imagesProperties, setImagesProperties] = useState(new Map<string, ImageProperties>());
+
+  const [selectedImageChecksum, setSelectedImageChecksum] = useState<string>();
 
   const addImage = useCallback((imagesProperties: ImageProperties) => {
     setImagesProperties(previous => {
@@ -46,13 +55,17 @@ export const DuplicatedImagesContextProvider: FC<ReactNodeChildren> = ({ childre
       rootDirectory,
       setRootDirectory,
       imagesProperties,
-      addImage
+      addImage,
+      selectedImageChecksum,
+      setSelectedImageChecksum
     };
   }, [
     imagesProperties,
     setImagesProperties,
     rootDirectory,
-    setRootDirectory
+    setRootDirectory,
+    selectedImageChecksum,
+    setSelectedImageChecksum
   ]);
 
   return (

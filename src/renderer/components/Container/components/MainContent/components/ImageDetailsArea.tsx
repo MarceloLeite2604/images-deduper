@@ -3,41 +3,46 @@ import {
   Card,
   CardContent,
   CardMedia,
-  Checkbox,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
+  Radio,
+  RadioGroup,
   Typography
 } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 
 interface ImageDetailsAreaProperties {
+  imagePath: string,
   locations: string[]
 }
 
 interface LocationListItemProperties {
   location: string,
-  checked?: boolean
+  value: string
 };
 
-const LocationListItem = ({ location, checked = false }: LocationListItemProperties) => (
-  <ListItem>
+const LocationListItem = ({ location, value }: LocationListItemProperties) => (
+  <ListItem sx={{
+    paddingTop: '0px'
+  }}>
     <ListItemIcon>
-      <Checkbox
-        edge="start"
-        checked={checked}
-        tabIndex={-1}
-        disableRipple
+      <Radio
+        edge="end"
+        value={value}
+        sx={{
+          padding: '0.2rem'
+        }}
       />
     </ListItemIcon>
     <ListItemText
       primary={location}
-      primaryTypographyProps={{ width: 0 }} />
+      primaryTypographyProps={{ width: '100%' }} />
   </ListItem>
 )
 
-export const ImageDetailsArea = ({ locations }: ImageDetailsAreaProperties) => {
+export const ImageDetailsArea = ({ locations, imagePath }: ImageDetailsAreaProperties) => {
   return (
     <Card
       id='image-details-area-card'
@@ -49,10 +54,14 @@ export const ImageDetailsArea = ({ locations }: ImageDetailsAreaProperties) => {
         maxHeight: '100%',
         overflow: 'auto'
       }}>
-      <Box sx={{ flexGrow: 2, height: 0 }}>
+      <Box sx={{
+        flexGrow: 2,
+        height: 0,
+        display: 'flex'
+      }}>
         <CardMedia
           component='img'
-          image={locations[0]}
+          image={imagePath}
           sx={{
             flexGrow: 1,
             objectFit: "contain",
@@ -65,8 +74,8 @@ export const ImageDetailsArea = ({ locations }: ImageDetailsAreaProperties) => {
           display: 'flex',
           flexDirection: 'column'
         }}>
-        <Typography variant="body1">
-          Located at
+        <Typography variant="h5">
+          Select one location to preserve
         </Typography>
         <Grid
           container
@@ -75,10 +84,13 @@ export const ImageDetailsArea = ({ locations }: ImageDetailsAreaProperties) => {
           flexGrow={1}
           height={0}>
           <List sx={{ overflow: 'auto' }}>
-            {locations.map((location, index) => (
-              <LocationListItem
-                location={location}
-                key={"" + index} />))}
+            <RadioGroup>
+              {locations.map((location, index) => (
+                <LocationListItem
+                  location={location}
+                  value={"" + index}
+                  key={"" + index} />))}
+            </RadioGroup>
           </List>
         </Grid>
       </CardContent>
