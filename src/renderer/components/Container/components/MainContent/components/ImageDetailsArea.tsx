@@ -13,6 +13,7 @@ import {
 import Grid from '@mui/material/Unstable_Grid2';
 
 interface ImageDetailsAreaProperties {
+  imagePath: string,
   locations: string[]
 }
 
@@ -37,7 +38,7 @@ const LocationListItem = ({ location, checked = false }: LocationListItemPropert
   </ListItem>
 )
 
-export const ImageDetailsArea = ({ locations }: ImageDetailsAreaProperties) => {
+export const ImageDetailsArea = ({ locations, imagePath }: ImageDetailsAreaProperties) => {
   return (
     <Card
       id='image-details-area-card'
@@ -52,7 +53,7 @@ export const ImageDetailsArea = ({ locations }: ImageDetailsAreaProperties) => {
       <Box sx={{ flexGrow: 2, height: 0 }}>
         <CardMedia
           component='img'
-          image={locations[0]}
+          image={imagePath}
           sx={{
             flexGrow: 1,
             objectFit: "contain",

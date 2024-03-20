@@ -4,11 +4,18 @@ import {
   SelectDirectoryButton,
   ImageDetailsArea
 } from './components';
-import { useState } from 'react';
+import { useContext } from 'react';
+import { DuplicatedImagesContext } from '../../contexts';
+import path from 'path-browserify';
 
 export const MainContent = () => {
 
-  const [selectedImageLocations] = useState<string[]>(['local-file:///home/marcelo/Pictures/IMG-20220628-WA0002 (copy).jpg']);
+  const { rootDirectory, selectedImageChecksum, imagesProperties } = useContext(DuplicatedImagesContext);
+
+  const selectedImageProperties = imagesProperties.get(selectedImageChecksum);
+
+  const relativeLocations = selectedImageProperties?.locations.map(location => path.relative(rootDirectory, location));
+
 
   return (
     <Grid
@@ -44,7 +51,7 @@ export const MainContent = () => {
           overflow="auto">
           <DuplicatedImagesArea />
         </Grid>
-        {selectedImageLocations &&
+        {relativeLocations &&
           <Grid
             container
             flexGrow={1}
@@ -55,7 +62,9 @@ export const MainContent = () => {
               maxHeight: '100%',
               padding: '0.4rem'
             }}>
-            <ImageDetailsArea locations={selectedImageLocations} />
+            <ImageDetailsArea
+              imagePath={`local-file://${selectedImageProperties?.locations[0]}`}
+              locations={relativeLocations} />
           </Grid>}
       </Grid>
     </Grid>

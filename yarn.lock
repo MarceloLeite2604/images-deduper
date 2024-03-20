@@ -1428,6 +1428,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/path-browserify@npm:^1":
+  version: 1.0.2
+  resolution: "@types/path-browserify@npm:1.0.2"
+  checksum: 4140970d1d171760a63e2be7ae050e12b7035e99205d190f12b039c0afb5dc975352a913a7fde0997e38e74102f3496c73f49128c126492ca5d1498a0f1a5206
+  languageName: node
+  linkType: hard
+
 "@types/prop-types@npm:*, @types/prop-types@npm:^15.7.11":
   version: 15.7.11
   resolution: "@types/prop-types@npm:15.7.11"
@@ -5492,6 +5499,7 @@ __metadata:
     "@mui/material": "npm:^5.15.6"
     "@types/electron-squirrel-startup": "npm:^1"
     "@types/eslint": "npm:^8"
+    "@types/path-browserify": "npm:^1"
     "@types/react": "npm:^18"
     "@types/react-dom": "npm:^18"
     "@typescript-eslint/eslint-plugin": "npm:^5.0.0"
@@ -5506,6 +5514,7 @@ __metadata:
     is-image: "npm:^4.0.0"
     node-loader: "npm:^2.0.0"
     node-polyfill-webpack-plugin: "npm:^3.0.0"
+    path-browserify: "npm:^1.0.1"
     react: "npm:^18.2.0"
     react-dom: "npm:^18.2.0"
     style-loader: "npm:^3.0.0"
