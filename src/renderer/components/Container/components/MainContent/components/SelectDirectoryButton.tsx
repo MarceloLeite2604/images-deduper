@@ -1,7 +1,7 @@
 import { Button, Typography } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import { MouseEventHandler, useContext } from 'react';
-import { DuplicatedImagesContext } from '../../../contexts';
+import { RendererContext } from '../../../contexts';
 
 const selectDirectory: MouseEventHandler = () => {
   window.electronApi.selectDirectory();
@@ -9,7 +9,7 @@ const selectDirectory: MouseEventHandler = () => {
 
 export const SelectDirectoryButton = () => {
 
-  const { rootDirectory } = useContext(DuplicatedImagesContext);
+  const { context: { rootDirectory } } = useContext(RendererContext);
 
   return (
     <Grid

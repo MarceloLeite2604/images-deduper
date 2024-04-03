@@ -4,16 +4,17 @@ import crypto from 'crypto';
 import isImage from 'is-image';
 import { OpenDialogReturnValue } from 'electron';
 import { updateStatus, addImage } from './ipcs';
-import { ImageProperties } from '../shared';
+import { ImagePath, ImageProperties } from '../shared';
 
 const ignoredExtensions = ['.xcf'];
 
 interface Context {
+  rootDirectory: string,
   images: {
     paths: string[],
     total: number,
     processed: number,
-    hashes: Map<string, string[]>
+    relativePathsByChecksum: Map<string, string[]>
   }
 }
 
@@ -23,13 +24,21 @@ function filterImageFilesOnly(dirEnts: fs.Dirent[]) {
     !ignoredExtensions.includes(path.extname(dirEnt.name).toLowerCase()));
 }
 
-async function retrieveImagesFromDirectory(directoryPath: string) {
-  return fs.promises.readdir(directoryPath, {
+async function retrieveImagesFromDirectory(context: Context) {
+  return fs.promises.readdir(context.rootDirectory, {
     withFileTypes: true,
     recursive: true
   })
     .then(filterImageFilesOnly)
-    .then(dirents => dirents.map(dirent => path.resolve(dirent.path, dirent.name)));
+    .then(dirents => dirents.map(dirent => path.resolve(dirent.path, dirent.name)))
+    .then<Context>(imagePaths => ({
+      ...context,
+      images: {
+        ...context.images,
+        paths: imagePaths,
+        total: imagePaths.length
+      }
+    }));
 }
 
 async function calculateFileChecksum(path: string) {
@@ -60,23 +69,29 @@ async function calculateChecksums(context: Context) {
     });
   }
 
-  for (const imagePath of context.images.paths) {
-    const checksum = await calculateFileChecksum(imagePath);
-    const images = context.images.hashes.get(checksum) || [];
-    images.push(imagePath);
-    context.images.hashes.set(checksum, images);
+  for (const absolutePath of context.images.paths) {
+    const checksum = await calculateFileChecksum(absolutePath);
+    const relativePaths = context.images.relativePathsByChecksum.get(checksum) || [];
+    const relativePath = path.relative(context.rootDirectory, absolutePath);
+    relativePaths.push(relativePath);
+    context.images.relativePathsByChecksum.set(checksum, relativePaths);
 
-    currentImage = imagePath;
     progress = (context.images.processed / context.images.total) * 100;
 
     updateStatusIntervalId ??= setInterval(updateImageScanningStatus, 50);
 
 
-    if (images.length > 1) {
+    if (relativePaths.length > 1) {
+
+      const imagePaths = relativePaths.map(relativePath => ({
+        path: relativePath,
+        excluded: false,
+        selected: false
+      } as ImagePath))
 
       const imageProperties: ImageProperties = {
         checksum,
-        locations: images
+        relativePaths: imagePaths
       };
 
       addImage(imageProperties);
@@ -87,26 +102,24 @@ async function calculateChecksums(context: Context) {
 
   updateStatusIntervalId && clearInterval(updateStatusIntervalId)
   updateStatus({
-    message: `Analysis complete. ${context.images.total} image(s) analysed. ${[...context.images.hashes.keys()].length} duplicates found.`,
+    message: `Analysis complete. ${context.images.total} image(s) analysed. ${[...context.images.relativePathsByChecksum.keys()].length} duplicates found.`,
     progress: 100
   });
 
   return context;
 }
 
-function createInitialContext(imagePaths: string[]) {
-  return {
-    images: {
-      paths: imagePaths,
-      total: imagePaths.length,
-      processed: 0,
-      hashes: new Map<string, string[]>()
-    }
-  } as Context;
-}
-
 export function processImages(result: OpenDialogReturnValue) {
-  return retrieveImagesFromDirectory(result.filePaths[0])
-    .then(createInitialContext)
+  const context: Context = {
+    rootDirectory: result.filePaths[0],
+    images: {
+      paths: [],
+      total: 0,
+      processed: 0,
+      relativePathsByChecksum: new Map<string, string[]>()
+    }
+  };
+  console.log(`Root directory is ${context.rootDirectory}`)
+  return retrieveImagesFromDirectory(context)
     .then(calculateChecksums);
 }

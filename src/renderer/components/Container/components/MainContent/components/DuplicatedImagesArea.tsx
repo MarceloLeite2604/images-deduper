@@ -1,12 +1,12 @@
 import { useContext } from 'react';
-import { DuplicatedImagesContext } from '../../../contexts';
+import { RendererContext } from '../../../contexts';
 import { ImageCard } from './ImageCard';
 
 export const DuplicatedImagesArea = () => {
 
-  const { imagesProperties } = useContext(DuplicatedImagesContext);
+  const { context: { duplicatedImages } } = useContext(RendererContext);
 
-  return [...imagesProperties.entries()].map(([checksum, imageProperties]) =>
+  return [...duplicatedImages.entries()].map(([checksum, imageProperties]) =>
     <ImageCard
       key={checksum}
       imageProperties={imageProperties} />

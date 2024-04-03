@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Card,
   CardContent,
   CardMedia,
@@ -12,25 +13,28 @@ import {
   Typography
 } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
-
-interface ImageDetailsAreaProperties {
-  imagePath: string,
-  locations: string[]
-}
+import React, { useContext } from 'react';
+import { RendererContext } from '../../../contexts';
+import pathBrowserify from 'path-browserify';
+import { localFileProtocol } from '../../../../../../shared';
 
 interface LocationListItemProperties {
   location: string,
-  value: string
+  value: number,
+  checked: boolean,
+  onClick: React.MouseEventHandler<HTMLButtonElement>
 };
 
-const LocationListItem = ({ location, value }: LocationListItemProperties) => (
+const LocationListItem = ({ location, value, checked, onClick }: LocationListItemProperties) => (
   <ListItem sx={{
     paddingTop: '0px'
   }}>
     <ListItemIcon>
       <Radio
         edge="end"
-        value={value}
+        value={"" + value}
+        checked={checked}
+        onClick={onClick}
         sx={{
           padding: '0.2rem'
         }}
@@ -42,7 +46,22 @@ const LocationListItem = ({ location, value }: LocationListItemProperties) => (
   </ListItem>
 )
 
-export const ImageDetailsArea = ({ locations, imagePath }: ImageDetailsAreaProperties) => {
+export const ImageDetailsArea = () => {
+
+  const { context: { rootDirectory, selectedImage } } = useContext(RendererContext);
+
+  const { relativePaths: selectedImageRelativePaths } = selectedImage;
+
+  const path = selectedImageRelativePaths.find(({ excluded }) => !excluded)?.path;
+
+  const imagePath = `${localFileProtocol}://${pathBrowserify.resolve(rootDirectory, path)}`;
+
+  const setSelectedPath = (selectedIndex?: number) => {
+    selectedImage.relativePaths.forEach((relativePath, index) =>
+      relativePath.selected = (index === selectedIndex)
+    );
+  }
+
   return (
     <Card
       id='image-details-area-card'
@@ -85,13 +104,22 @@ export const ImageDetailsArea = ({ locations, imagePath }: ImageDetailsAreaPrope
           height={0}>
           <List sx={{ overflow: 'auto' }}>
             <RadioGroup>
-              {locations.map((location, index) => (
+              {selectedImageRelativePaths.map(({ path, selected }, index) => (
                 <LocationListItem
-                  location={location}
-                  value={"" + index}
+                  location={path}
+                  value={index}
+                  checked={selected}
+                  onClick={() => setSelectedPath(selected ? undefined : index)}
                   key={"" + index} />))}
             </RadioGroup>
           </List>
+        </Grid>
+        <Grid
+          display='flex'
+          justifyContent='center'>
+          <Button
+            variant='contained'
+            disabled={selectedImage === undefined}>Move other {selectedImage.relativePaths.length > 0 ? 'copies' : 'copy'} to trash</Button>
         </Grid>
       </CardContent>
     </Card >

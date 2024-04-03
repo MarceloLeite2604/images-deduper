@@ -1,12 +1,12 @@
 import { Typography } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import { ThickLinearProgress } from './components';
-import { StatusContext } from '../../contexts';
+import { RendererContext } from '../../contexts';
 import { useContext } from 'react';
 
 export const StatusBar = () => {
 
-  const { properties: { progress, message } } = useContext(StatusContext);
+  const { context: { status: { progress, message } } } = useContext(RendererContext);
 
   const progressBar = progress ? <ThickLinearProgress value={progress} /> : <></>;
 

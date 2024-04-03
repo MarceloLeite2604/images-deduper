@@ -1,9 +1,19 @@
-import { Card, CardActionArea, CardMedia, CardMediaProps, styled } from '@mui/material';
+import {
+  Card,
+  CardActionArea,
+  CardMedia,
+  CardMediaProps,
+  styled
+} from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
-
 import { ImageProperties, localFileProtocol } from '../../../../../../shared';
-import { DuplicatedImagesContext } from '../../../contexts';
-import { MouseEventHandler, useContext } from 'react';
+import { RendererContext } from '../../../contexts';
+import {
+  MouseEventHandler,
+  useCallback,
+  useContext
+} from 'react';
+import pathBrowserify from 'path-browserify';
 
 interface ImageCardProperties {
   imageProperties: ImageProperties
@@ -27,17 +37,28 @@ const DuplicatedImageCardMedia = styled(CardMedia)<DuplicatedImageCardMediaProps
 
 export const ImageCard = ({ imageProperties }: ImageCardProperties) => {
 
-  const location = `${localFileProtocol}://${imageProperties.locations[0]}`;
+  const relativeImagePath = imageProperties.relativePaths
+    .find(({ excluded }) => !excluded)
+    ?.path;
 
-  const { selectedImageChecksum, setSelectedImageChecksum } = useContext(DuplicatedImagesContext);
+  const { context, updateContext } = useContext(RendererContext);
 
-  const selected = imageProperties.checksum == selectedImageChecksum;
+  const location = `${localFileProtocol}://${pathBrowserify.resolve(context.rootDirectory, relativeImagePath)}`;
+
+  const selected = imageProperties.checksum === context.selectedImage?.checksum;
+
+  const setSelectedImage = useCallback((selectedImage?: ImageProperties) => {
+    console.log(selectedImage);
+
+    updateContext({ selectedImage })
+  }, [updateContext]);
 
   const toggleImage: MouseEventHandler = () => {
+
     if (selected) {
-      setSelectedImageChecksum(undefined);
+      setSelectedImage();
     } else {
-      setSelectedImageChecksum(imageProperties.checksum);
+      setSelectedImage(imageProperties);
     }
   }
 

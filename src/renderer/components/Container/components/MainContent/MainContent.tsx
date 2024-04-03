@@ -5,17 +5,13 @@ import {
   ImageDetailsArea
 } from './components';
 import { useContext } from 'react';
-import { DuplicatedImagesContext } from '../../contexts';
-import path from 'path-browserify';
+import { RendererContext } from '../../contexts';
 
 export const MainContent = () => {
 
-  const { rootDirectory, selectedImageChecksum, imagesProperties } = useContext(DuplicatedImagesContext);
+  const { context } = useContext(RendererContext);
 
-  const selectedImageProperties = imagesProperties.get(selectedImageChecksum);
-
-  const relativeLocations = selectedImageProperties?.locations.map(location => path.relative(rootDirectory, location));
-
+  const relativePaths = context.selectedImage?.relativePaths;
 
   return (
     <Grid
@@ -51,7 +47,7 @@ export const MainContent = () => {
           overflow="auto">
           <DuplicatedImagesArea />
         </Grid>
-        {relativeLocations &&
+        {relativePaths &&
           <Grid
             container
             flexGrow={1}
@@ -62,9 +58,7 @@ export const MainContent = () => {
               maxHeight: '100%',
               padding: '0.4rem'
             }}>
-            <ImageDetailsArea
-              imagePath={`local-file://${selectedImageProperties?.locations[0]}`}
-              locations={relativeLocations} />
+            <ImageDetailsArea />
           </Grid>}
       </Grid>
     </Grid>
