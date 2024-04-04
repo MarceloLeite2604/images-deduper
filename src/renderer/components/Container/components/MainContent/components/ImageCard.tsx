@@ -48,7 +48,6 @@ export const ImageCard = ({ imageProperties }: ImageCardProperties) => {
   const selected = imageProperties.checksum === context.selectedImage?.checksum;
 
   const setSelectedImage = useCallback((selectedImage?: ImageProperties) => {
-    console.log(selectedImage);
 
     updateContext({ selectedImage })
   }, [updateContext]);

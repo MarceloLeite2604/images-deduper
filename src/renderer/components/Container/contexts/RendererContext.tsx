@@ -32,19 +32,26 @@ export const RendererContextProvider: FC<ReactNodeChildren> = ({ children }) => 
     }
   } as RendererContextType);
 
-  const addImage = useCallback((imagesProperties: ImageProperties) => {
-    setContext(previous => {
-      const { relativePaths: incomingRelativePaths } = imagesProperties;
-      const previousImageProperties = previous.duplicatedImages.get(imagesProperties.checksum) || imagesProperties;
-      const { relativePaths: previousRelativePaths } = previousImageProperties;
+  const addImage = useCallback((incomingImageProperties: ImageProperties) => {
+    setContext(previousContext => {
+      const { relativePaths: incomingRelativePaths } = incomingImageProperties;
+      const previousImageProperties = previousContext.duplicatedImages.get(incomingImageProperties.checksum);
+      const previousRelativePaths = (previousImageProperties?.relativePaths || []);
 
-      const newRelativePaths = incomingRelativePaths.filter(incomingRelativePath => !previousRelativePaths.includes(incomingRelativePath));
-      previousImageProperties.relativePaths.push(...newRelativePaths);
+      const previousPaths = previousRelativePaths.map(imagePath => imagePath.path);
 
-      const duplicatedImages = new Map(previous.duplicatedImages.set(previousImageProperties.checksum, previousImageProperties));
+      const newRelativePaths = incomingImageProperties.relativePaths.filter(
+        incomingRelativePath => !previousPaths.includes(incomingRelativePath.path));
+
+      const mergedRelativePaths = [...previousRelativePaths, ...newRelativePaths];
+
+      const mergedImageProperties = (previousImageProperties || incomingImageProperties);
+      mergedImageProperties.relativePaths = mergedRelativePaths;
+
+      const duplicatedImages = new Map(previousContext.duplicatedImages.set(incomingImageProperties.checksum, mergedImageProperties));
 
       return {
-        ...previous,
+        ...previousContext,
         duplicatedImages
       };
     });
@@ -65,8 +72,7 @@ export const RendererContextProvider: FC<ReactNodeChildren> = ({ children }) => 
   }, [setContext]);
 
   const updateContext = useCallback((context: Partial<RendererContextType>) => {
-    console.log('Context:');
-    console.log(context)
+
     setContext(previousContext => ({
       ...previousContext,
       ...context

@@ -13,7 +13,7 @@ import {
   Typography
 } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
-import React, { useContext } from 'react';
+import React, { useCallback, useContext } from 'react';
 import { RendererContext } from '../../../contexts';
 import pathBrowserify from 'path-browserify';
 import { localFileProtocol } from '../../../../../../shared';
@@ -48,7 +48,7 @@ const LocationListItem = ({ location, value, checked, onClick }: LocationListIte
 
 export const ImageDetailsArea = () => {
 
-  const { context: { rootDirectory, selectedImage } } = useContext(RendererContext);
+  const { context: { rootDirectory, selectedImage }, updateContext } = useContext(RendererContext);
 
   const { relativePaths: selectedImageRelativePaths } = selectedImage;
 
@@ -56,11 +56,16 @@ export const ImageDetailsArea = () => {
 
   const imagePath = `${localFileProtocol}://${pathBrowserify.resolve(rootDirectory, path)}`;
 
-  const setSelectedPath = (selectedIndex?: number) => {
+  const setSelectedPath = useCallback((selectedIndex?: number) => {
+
     selectedImage.relativePaths.forEach((relativePath, index) =>
       relativePath.selected = (index === selectedIndex)
     );
-  }
+
+    updateContext({ selectedImage });
+  }, [updateContext]);
+
+  const selectedImagePath = selectedImageRelativePaths.find(({ selected }) => selected);
 
   return (
     <Card
@@ -119,7 +124,7 @@ export const ImageDetailsArea = () => {
           justifyContent='center'>
           <Button
             variant='contained'
-            disabled={selectedImage === undefined}>Move other {selectedImage.relativePaths.length > 0 ? 'copies' : 'copy'} to trash</Button>
+            disabled={selectedImagePath === undefined}>Move other {selectedImage.relativePaths.length > 2 ? 'copies' : 'copy'} to trash</Button>
         </Grid>
       </CardContent>
     </Card >

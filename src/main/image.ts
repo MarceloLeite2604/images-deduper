@@ -119,7 +119,6 @@ export function processImages(result: OpenDialogReturnValue) {
       relativePathsByChecksum: new Map<string, string[]>()
     }
   };
-  console.log(`Root directory is ${context.rootDirectory}`)
   return retrieveImagesFromDirectory(context)
     .then(calculateChecksums);
 }
